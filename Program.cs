@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,22 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// Ensure database is created and seed minimal data for local testing
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+
+    if (!db.Categories.Any())
+    {
+        var defaultCat = new Category { Name = "Default" };
+        db.Categories.Add(defaultCat);
+        db.Products.Add(new Product { Name = "Sample Product", Price = 9.99M, Category = defaultCat });
+        db.Users.Add(new User { Email = "user@example.com" });
+        db.SaveChanges();
+    }
+}
 
 // ===================== MIDDLEWARE =====================
 app.UseSwagger();
