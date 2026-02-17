@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api:
+    image: estoreapi:latest
+    container_name: estoremanagementapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+    volumes:
+      - ./data:/app/data
+      - ./shop.db:/app/shop.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - estorenetwork
+
+networks:
+  estorenetwork:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

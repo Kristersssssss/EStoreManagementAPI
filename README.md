@@ -1,104 +1,128 @@
-# OnlineShopAPI – Programmēšana II projekts
+# EStoreManagementAPI
 
-##  Projekta apraksts
-Šis projekts ir izstrādāts kursa **Programmēšana II** ietvaros. Projekta mērķis ir izveidot REST API, izmantojot **ASP.NET Core**, **Entity Framework**, **Swagger** un **JWT autentifikāciju**.
+A modern ASP.NET Core 7 REST API for e-store management with JWT authentication, SQLite database, and Swagger documentation.
 
-API nodrošina vienkāršu Eveikala funkcionalitāti – preču, kategoriju un pasūtījumu pārvaldību, kā arī lietotāju autentifikāciju.
+## Features
 
----
+- **REST API** with full CRUD operations for products and categories
+- **JWT Authentication** for secure order management
+- **SQLite Database** with Entity Framework Core
+- **Swagger/OpenAPI** documentation with interactive UI
+- **Migrations** for database schema management
+- **Docker Support** for containerized deployment
+- **Input Validation** on all endpoints
+- **Error Handling** with descriptive responses
 
-##   Izmantotās tehnoloģijas
-- ASP.NET Core Web API  
-- Entity Framework Core  
-- SQLite datubāze  
-- Swagger (Swashbuckle.AspNetCore)  
-- JWT (JSON Web Token) autentifikācija  
+## Prerequisites
 
----
+- .NET 7 SDK ([download](https://dotnet.microsoft.com/en-us/download/dotnet/7.0))
+- Docker (optional, for containerized deployment)
 
-##  Datu bāzes struktūra
-Projektā tiek izmantota relāciju datubāze ar **4 tabulām**:
+## Quick Start
 
-| Tabula     | Apraksts |
-|------------|----------|
-| Users      | Lietotāji (e-pasts) |
-| Categories | Preču kategorijas |
-| Products   | Preces ar cenu un kategoriju |
-| Orders     | Pasūtījumi, kas piesaistīti lietotājiem |
+### Local Development
 
-Tabulas ir savienotas ar **ārējām atslēgām (Foreign Keys)**, izmantojot Entity Framework.
+1. **Navigate to project:**
+   ```bash
+   cd c:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI
+   ```
 
----
+2. **Build project:**
+   ```bash
+   dotnet build
+   ```
 
-##  API Endpointi
+3. **Apply database migrations:**
+   ```bash
+   dotnet ef database update
+   ```
 
-###  Products
-- `GET /api/products` – atgriež visu preču sarakstu  
-- `POST /api/products` – pievieno jaunu preci  
+4. **Run the server:**
+   ```bash
+   dotnet run --urls http://localhost:5000
+   ```
 
-###  Categories
-- `GET /api/categories` – atgriež visas kategorijas  
-- `POST /api/categories` – pievieno jaunu kategoriju  
+5. **Access Swagger UI:**
+   - Browser: http://localhost:5000/swagger
+   - API Root: http://localhost:5000
+   - Health: http://localhost:5000/health
 
-###  Orders (aizsargāts ar JWT)
-- `GET /api/orders` – atgriež visus pasūtījumus (pieejams tikai ar tokenu)
+### Docker Deployment
 
-###  Authentication
-- `POST /api/auth/login` – izveido JWT tokenu lietotājam
+1. **Build Docker image:**
+   ```bash
+   docker build -t estoreapi:latest .
+   ```
 
----
+2. **Run with docker-compose:**
+   ```bash
+   docker-compose up -d
+   ```
 
-##  JWT Autentifikācija
-JWT (JSON Web Token) tiek izmantots, lai aizsargātu API endpointus.
+3. **Access containerized API:**
+   - Swagger: http://localhost:8080/swagger
+   - Health: http://localhost:8080/health
 
-Tokena darbības princips:
-1. Lietotājs piesakās ar `/api/auth/login`
-2. API atgriež JWT tokenu
-3. Tokenu pievieno pieprasījumam kā `Authorization: Bearer {token}`
-4. Aizsargātie endpointi pārbauda tokenu
+## API Documentation
 
----
+### Products Endpoints
 
-##  Swagger
-Swagger ir integrēts projektā un pieejams pēc API palaišanas:
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/products` | Get all products | No |
+| GET | `/api/products/{id}` | Get product by ID | No |
+| POST | `/api/products` | Create new product | No |
+| PUT | `/api/products/{id}` | Update product | No |
+| DELETE | `/api/products/{id}` | Delete product | No |
 
+**Request Example (POST):**
+```json
+{
+  "name": "Laptop",
+  "price": 999.99,
+  "categoryId": 1
+}
+```
 
-Swagger piedāvā:
-- visu endpointu dokumentāciju
-- datu modeļu (schemas) apskati
-- iespēju testēt GET un POST pieprasījumus
-- JWT autorizāciju caur **Authorize** pogu
+### Categories Endpoints
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/categories` | Get all categories |
+| GET | `/api/categories/{id}` | Get category by ID |
+| POST | `/api/categories` | Create new category |
+| PUT | `/api/categories/{id}` | Update category |
+| DELETE | `/api/categories/{id}` | Delete category |
 
-##  Kā palaist projektu
-1. Klonē repozitoriju:
-2. Atver projektu Visual Studio
-3. Palaid projektu (`Run`)
-4. Atver Swagger UI pārlūkā
+### Orders Endpoints (JWT Required)
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/orders` | Get all orders |
+| POST | `/api/orders` | Create new order |
 
-##  Prezentācija
-Projekta noslēgumā tika sagatavota video prezentācija, kurā:
-- parādīta API darbība
-- demonstrēta datubāze un Swagger
-- izskaidrota JWT autentifikācija
-- aprakstīta koda struktūra un izmantotās tehnoloģijas
+### Authentication
 
- **Video saite:** (pievienot šeit)
+| Method | Endpoint |
+|--------|----------|
+| POST | `/api/auth/login` |
 
----
+## Project Structure
 
-##  Komanda
-- Komandas vadītājs: _(Kristers, Zujevs)_
+```
+.
+├── Program.cs              # Main application, endpoints, configuration
+├── EStoreManagementAPI.csproj  # Project dependencies
+├── Migrations/             # EF Core database migrations
+├── shop.db                 # SQLite database (generated)
+├── Dockerfile              # Docker image definition
+├── docker-compose.yml      # Docker Compose orchestration
+└── README.md              # This file
+```
 
----
+## Database Schema
 
-##  Secinājumi
-Šis projekts palīdzēja apgūt:
-- REST API pamatus
-- darbu ar Entity Framework
-- relāciju datubāžu modelēšanu
-- Swagger izmantošanu dokumentēšanai
-- JWT autentifikācijas ieviešanu
+- **Users:** Id, Email
+- **Categories:** Id, Name
+- **Products:** Id, Name, Price, CategoryId (FK)
+- **Orders:** Id, OrderDate, UserId (FK)

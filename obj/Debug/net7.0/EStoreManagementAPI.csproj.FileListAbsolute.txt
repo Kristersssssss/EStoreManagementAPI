@@ -72,3 +72,7 @@ C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\obj\Debug\net7.0\refint\
 C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\obj\Debug\net7.0\EStoreManagementAPI.pdb
 C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\obj\Debug\net7.0\EStoreManagementAPI.genruntimeconfig.cache
 C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\obj\Debug\net7.0\ref\EStoreManagementAPI.dll
+C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\bin\Debug\net7.0\Humanizer.dll
+C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\Lietotajs\Documents\GitHub\EStoreManagementAPI\bin\Debug\net7.0\System.CodeDom.dll
