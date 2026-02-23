@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using BCrypt.Net;
 using EStoreManagementAPI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -244,28 +245,29 @@ app.MapPost("/api/orders",
 });
 
 // -------- AUTH --------
-record LoginRequest(string Email);
+record AuthRequest(string Email, string Password);
 
-app.MapPost("/api/auth/register", async (User user, AppDbContext db) =>
+app.MapPost("/api/auth/register", async (AuthRequest req, AppDbContext db) =>
 {
-    if (string.IsNullOrWhiteSpace(user.Email))
-        return Results.BadRequest(new { message = "Email is required." });
+    if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+        return Results.BadRequest(new { message = "Email and Password are required." });
 
-    if (await db.Users.AnyAsync(u => u.Email == user.Email))
+    if (await db.Users.AnyAsync(u => u.Email == req.Email))
         return Results.Conflict(new { message = "User already exists." });
 
+    var user = new User { Email = req.Email, PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password) };
     db.Users.Add(user);
     await db.SaveChangesAsync();
-    return Results.Created($"/api/users/{user.Id}", user);
+    return Results.Created($"/api/users/{user.Id}", new { user.Id, user.Email });
 });
 
-app.MapPost("/api/auth/login", async (LoginRequest req, AppDbContext db) =>
+app.MapPost("/api/auth/login", async (AuthRequest req, AppDbContext db) =>
 {
-    if (string.IsNullOrWhiteSpace(req.Email))
-        return Results.BadRequest(new { message = "Email is required." });
+    if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+        return Results.BadRequest(new { message = "Email and Password are required." });
 
     var user = await db.Users.FirstOrDefaultAsync(u => u.Email == req.Email);
-    if (user == null)
+    if (user == null || string.IsNullOrWhiteSpace(user.PasswordHash) || !BCrypt.Net.BCrypt.Verify(req.Password, user.PasswordHash))
         return Results.Unauthorized();
 
     var tokenHandler = new JwtSecurityTokenHandler();
@@ -285,6 +287,16 @@ app.MapPost("/api/auth/login", async (LoginRequest req, AppDbContext db) =>
 
     var token = tokenHandler.CreateToken(tokenDescriptor);
     return Results.Ok(new { token = tokenHandler.WriteToken(token), expiresIn = "1 hour" });
+});
+
+// Public user endpoints (no password hash returned)
+app.MapGet("/api/users", async (AppDbContext db) =>
+    await db.Users.Select(u => new { u.Id, u.Email }).ToListAsync());
+
+app.MapGet("/api/users/{id}", async (int id, AppDbContext db) =>
+{
+    var u = await db.Users.FindAsync(id);
+    return u == null ? Results.NotFound() : Results.Ok(new { u.Id, u.Email });
 });
 
 // -------- HEALTH --------
