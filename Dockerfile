@@ -27,8 +27,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 
 WORKDIR /app
 
-# Copy published application
-COPY --from=publish /app/publish ./
+# Copy published application contents into runtime image root
+COPY --from=publish /app/. ./
 
 # Create volume for database persistence
 VOLUME ["/app/data"]
