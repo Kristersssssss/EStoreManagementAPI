@@ -244,9 +244,6 @@ app.MapPost("/api/orders",
     return Results.Created($"/api/orders/{order.Id}", order);
 });
 
-// -------- AUTH --------
-record AuthRequest(string Email, string Password);
-
 app.MapPost("/api/auth/register", async (AuthRequest req, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
@@ -397,13 +394,4 @@ async Task<IResult> GetCategories(int page, int pageSize, AppDbContext db)
 }
 
 // ===================== DB CONTEXT =====================
-public class AppDbContext : DbContext
-{
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) { }
-
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Order> Orders => Set<Order>();
-}
+// AppDbContext moved to AppDbContext.cs

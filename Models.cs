@@ -43,3 +43,5 @@ public class PagedResult<T>
     public bool HasNextPage => Page < TotalPages;
     public bool HasPreviousPage => Page > 1;
 }
+
+public record AuthRequest(string Email, string Password);
