@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Tag } from "lucide-react";
 import { Listing } from "./types";
 import { useCart } from "@/contexts/CartContext";
-import { Product } from "@/features/catalog/types";
+import { Product } from "../catalog/types";
 
 const ListingCard = ({ listing }: { listing: Listing }) => {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -18,7 +18,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
       image: listing.image,
       rating: { rate: 4.5, count: 99 },
     };
-    addItem(asProduct);
+    addToCart(asProduct);
   };
 
   return (
@@ -29,7 +29,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
       transition={{ duration: 0.25 }}
       className="glass-card group relative flex flex-col overflow-hidden rounded-xl"
     >
-      {listing.sold && (
+      {listing.status === 'sold' && (
         <div className="absolute left-3 top-3 z-10 rounded bg-primary px-2 py-0.5 text-[10px] font-black uppercase text-primary-foreground">
           Sold
         </div>
@@ -49,7 +49,6 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
           <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] font-medium text-secondary-foreground">
             {listing.category}
           </span>
-          <span className="text-[10px] text-muted-foreground">{listing.condition}</span>
         </div>
         <h3 className="mb-1 line-clamp-2 text-xs font-semibold leading-snug text-foreground">
           {listing.title}
@@ -62,7 +61,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
             <Tag className="h-3 w-3 text-primary" />
             <span className="text-sm font-bold text-primary">${listing.price.toFixed(2)}</span>
           </div>
-          {!listing.sold && (
+          {listing.status !== 'sold' && (
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={handleAdd}
@@ -72,7 +71,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
             </motion.button>
           )}
         </div>
-        <p className="mt-1.5 text-[10px] text-muted-foreground">by {listing.seller}</p>
+        <p className="mt-1.5 text-[10px] text-muted-foreground">by {listing.sellerName}</p>
       </div>
     </motion.div>
   );

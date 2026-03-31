@@ -30,7 +30,6 @@ const SellGearPage = () => {
       price: Number(form.price),
       category: form.category,
       image: form.image,
-      condition: form.condition,
     });
     setSubmitted(true);
     setTimeout(() => {

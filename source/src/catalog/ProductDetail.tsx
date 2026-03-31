@@ -13,7 +13,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [added, setAdded] = useState(false);
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const load = async () => {
     if (!id) return;
@@ -33,7 +33,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addItem(product);
+    addToCart(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };

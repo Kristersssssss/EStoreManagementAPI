@@ -1,30 +1,30 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Listing } from "@/features/marketplace/types";
-import { mockListings } from "@/features/marketplace/api";
+
+interface Listing {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+  createdAt: string;
+  sellerId: string;
+  sellerName: string;
+  status: 'active' | 'sold' | 'inactive';
+}
 
 interface ListingsContextType {
-  allListings: Listing[];
-  userListings: Listing[];
-  soldListings: Listing[];
-  addListing: (listing: Omit<Listing, "id" | "createdAt" | "sold" | "seller">) => void;
+  activeListings: Listing[];
+  soldHistory: Listing[];
+  addListing: (listing: Omit<Listing, "id" | "createdAt" | "sellerId" | "sellerName" | "status">) => void;
   markAsSold: (id: string) => void;
 }
 
 const ListingsContext = createContext<ListingsContextType | undefined>(undefined);
 
-const LISTINGS_KEY = "estore_listings";
 const USER_LISTINGS_KEY = "estore_user_listings";
 
 export const ListingsProvider = ({ children }: { children: ReactNode }) => {
-  const [listings, setListings] = useState<Listing[]>(() => {
-    try {
-      const saved = localStorage.getItem(LISTINGS_KEY);
-      return saved ? JSON.parse(saved) : mockListings;
-    } catch {
-      return mockListings;
-    }
-  });
-
   const [userListings, setUserListings] = useState<Listing[]>(() => {
     try {
       const saved = localStorage.getItem(USER_LISTINGS_KEY);
@@ -35,49 +35,43 @@ export const ListingsProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem(LISTINGS_KEY, JSON.stringify(listings));
-  }, [listings]);
-
-  useEffect(() => {
     localStorage.setItem(USER_LISTINGS_KEY, JSON.stringify(userListings));
   }, [userListings]);
 
-  const addListing = (data: Omit<Listing, "id" | "createdAt" | "sold" | "seller">) => {
+  const activeListings = userListings.filter(listing => listing.status === 'active');
+  const soldHistory = userListings.filter(listing => listing.status === 'sold');
+
+  const addListing = (listingData: Omit<Listing, "id" | "createdAt" | "sellerId" | "sellerName" | "status">) => {
     const newListing: Listing = {
-      ...data,
-      id: `user-${Date.now()}`,
-      createdAt: new Date().toISOString().split("T")[0],
-      sold: false,
-      seller: "You",
+      ...listingData,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      sellerId: 'current-user', // In a real app, get from auth context
+      sellerName: 'Current User', // In a real app, get from auth context
+      status: 'active',
     };
-    setUserListings((prev) => [newListing, ...prev]);
-    setListings((prev) => [newListing, ...prev]);
+
+    setUserListings(prev => [...prev, newListing]);
   };
 
   const markAsSold = (id: string) => {
-    const update = (items: Listing[]) =>
-      items.map((l) => (l.id === id ? { ...l, sold: true } : l));
-    setListings(update);
-    setUserListings(update);
+    setUserListings(prev =>
+      prev.map(listing =>
+        listing.id === id
+          ? { ...listing, status: 'sold' as const }
+          : listing
+      )
+    );
   };
 
-  const allListings = listings;
-  const soldListings = userListings.filter((l) => l.sold);
-  const activeUserListings = userListings.filter((l) => !l.sold);
+  const value = {
+    activeListings,
+    soldHistory,
+    addListing,
+    markAsSold,
+  };
 
-  return (
-    <ListingsContext.Provider
-      value={{
-        allListings,
-        userListings: activeUserListings,
-        soldListings,
-        addListing,
-        markAsSold,
-      }}
-    >
-      {children}
-    </ListingsContext.Provider>
-  );
+  return <ListingsContext.Provider value={value}>{children}</ListingsContext.Provider>;
 };
 
 export const useListings = () => {

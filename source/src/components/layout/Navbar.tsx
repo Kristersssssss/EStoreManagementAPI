@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Cpu, ShoppingBag, PlusCircle, ShoppingCart, User, LogOut, Menu, X } from "lucide-react";
+import { Cpu, ShoppingBag, PlusCircle, User, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User as UserType } from "@/features/auth/types";
+import { User as UserType } from "../../auth/types";
 import CartDrawer from "@/components/cart/CartDrawer";
 
 interface NavbarProps {

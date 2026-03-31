@@ -3,24 +3,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useListings } from "@/contexts/ListingsContext";
-import { ListingCategory } from "./types";
+import { ListingCategory, Listing } from "./types";
 import ListingCard from "./ListingCard";
 
 const categories: ListingCategory[] = [
-  "All", "GPU", "Laptops", "Audio", "Peripherals", "Components", "Monitors",
+  "All", "GPU", "CPU", "RAM", "Motherboard", "Storage", "PSU", "Case", "Cooling", "Other",
 ];
 
 const MarketplacePage = () => {
-  const { allListings } = useListings();
+  const { activeListings } = useListings();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<ListingCategory>("All");
 
   const filtered = useMemo(() => {
     return allListings
-      .filter((l) => !l.sold)
-      .filter((l) => activeCategory === "All" || l.category === activeCategory)
+      .filter((l: Listing) => l.status === 'active')
+      .filter((l: Listing) => activeCategory === "All" || l.category === activeCategory)
       .filter(
-        (l) =>
+        (l: Listing) =>
           search === "" ||
           l.title.toLowerCase().includes(search.toLowerCase()) ||
           l.description.toLowerCase().includes(search.toLowerCase())

@@ -10,9 +10,10 @@ const SellGear: React.FC = () => {
   const { addToast } = useToast();
   const { theme } = useTheme();
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     price: '',
     description: '',
+    category: 'GPU',
     image: ''
   });
 
@@ -25,7 +26,7 @@ const SellGear: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.price || !formData.description || !formData.image) {
+    if (!formData.title || !formData.price || !formData.description || !formData.image) {
       addToast({
         type: 'error',
         title: 'Missing Fields',
@@ -45,9 +46,10 @@ const SellGear: React.FC = () => {
     }
 
     addListing({
-      name: formData.name,
+      title: formData.title,
       price,
       description: formData.description,
+      category: formData.category,
       image: formData.image
     });
 
@@ -58,9 +60,10 @@ const SellGear: React.FC = () => {
     });
 
     setFormData({
-      name: '',
+      title: '',
       price: '',
       description: '',
+      category: 'GPU',
       image: ''
     });
   };
@@ -98,9 +101,9 @@ const SellGear: React.FC = () => {
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleChange}
                 className={`w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg ${theme === 'dark' ? 'text-white placeholder-gray-400' : 'text-black placeholder-gray-500'} focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent`}
                 placeholder="e.g., RTX 4090 Graphics Card"
