@@ -9,4 +9,9 @@ export default defineConfig({
   css: {
     postcss: path.resolve(__dirname, 'postcss.config.js'),
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'source/src'),
+    },
+  },
 })

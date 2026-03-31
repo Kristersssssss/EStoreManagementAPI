@@ -1,0 +1,62 @@
+body {
+  background-image: url('path_to_your_background_image.jpg'); /* Update with your image path */
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: white; /* Default text color */
+}
+
+.app {
+  background-color: rgba(15, 23, 42, 0.8); /* bg-slate-900/80 */
+  min-height: 100vh;
+}
+
+.glass-header {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.nav-link {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #facc15; /* Cyber-Yellow */
+  text-shadow: 0 0 5px rgba(250, 204, 21, 0.6);
+}
+
+/* Add styles for the buttons */
+button {
+  background-color: #facc15; /* bg-yellow-400 */
+  color: #000; /* text-black */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.6); /* glowing effect */
+}
+.marketplace-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.glass-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  text-align: center;
+}
+
+.glass-card img {
+  max-width: 100%;
+  height: auto;
+}
