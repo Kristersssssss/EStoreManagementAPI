@@ -1,8 +1,10 @@
-# EStoreManagementAPI
+# EStore Management System
 
-A modern ASP.NET Core 7 REST API for e-store management with JWT authentication, SQLite database, and Swagger documentation.
+This project consists of two parts:
+- **Backend**: ASP.NET Core 7 REST API for e-store management
+- **Frontend**: React SPA with TypeScript and Tailwind CSS
 
-## Features
+## Backend Features
 
 - **REST API** with full CRUD operations for products and categories
 - **JWT Authentication** for secure order management
@@ -13,14 +15,40 @@ A modern ASP.NET Core 7 REST API for e-store management with JWT authentication,
 - **Input Validation** on all endpoints
 - **Error Handling** with descriptive responses
 
+## Frontend Features
+
+- **Modern Homepage**: Beautiful landing page with hero section and features
+- **User Registration**: Complete signup system with form validation
+- **React SPA** with TypeScript
+- **Product Catalog** using Fake Store API (GET requests)
+- **Product Creation** with form submission (POST requests)
+- **Shopping Cart** with local state management and localStorage persistence
+- **Authentication System** with context-based state
+- **Category Filtering** and product browsing
+- **Responsive Design** with Tailwind CSS
+- **Loading States** and **Error Handling**
+- **Feature-based Architecture** separating logic from UI
+- **TypeScript Interfaces** for all data and props
+
+## Frontend Technologies
+
+- **React 18** with hooks (useState, useEffect)
+- **TypeScript** for type safety
+- **Axios** for API requests (GET/POST)
+- **React Router** for SPA navigation
+- **Tailwind CSS** for responsive styling
+- **Context API** for global state management
+- **localStorage** for cart persistence
+
 ## Prerequisites
 
 - .NET 7 SDK ([download](https://dotnet.microsoft.com/en-us/download/dotnet/7.0))
+- Node.js and npm
 - Docker (optional, for containerized deployment)
 
 ## Quick Start
 
-### Local Development
+### Backend Setup
 
 1. **Navigate to project:**
    ```bash
@@ -46,6 +74,26 @@ A modern ASP.NET Core 7 REST API for e-store management with JWT authentication,
    - Browser: http://localhost:5000/swagger
    - API Root: http://localhost:5000
    - Health: http://localhost:5000/health
+
+### Frontend Setup
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Open app:**
+   - Browser: http://localhost:5176
+   - **Homepage**: Modern landing page with features overview
+   - **Catalog**: Browse and shop products
+   - **Cart**: View and manage shopping cart
+   - **Sign Up**: Create new user account
+   - **Login**: Access existing account
 
 ### Docker Deployment
 
